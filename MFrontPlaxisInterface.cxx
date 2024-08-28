@@ -100,19 +100,37 @@ MFrontBehaviourDataBase::MFrontBehaviourDataBase() noexcept(false) {
 
 extern "C"{
 
+  static int handle_cxx_exceptions(const char* const caller) noexcept{
+    try {
+      throw;
+    } catch (std::exception &e) {
+      std::cerr << caller << "failed: " << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << caller << "failed due to unknown exception"
+		<< std::endl;
+    }
+    return 0;
+  }
+  
 int mfront_plaxis_interface(const int task, const int mode) {
   using namespace mfront::plaxis;
   try {
     const auto &db = MFrontBehaviourDataBase::get();
-  } catch (std::exception &e) {
-    std::cerr << "mfront_plaxis_interface failed: " << e.what() << std::endl;
-    return 0;
   } catch (...) {
-    std::cerr << "mfront_plaxis_interface failed due to unknown exception"
-              << std::endl;
-    return 0;
+    return handle_cxx_exceptions("mfront_plaxis_interface");
   }
   return 1;
 }
 
+int mfront_plaxis_interface_get_model_count() {
+  using namespace mfront::plaxis;
+  try {
+    const auto &db = MFrontBehaviourDataBase::get();
+    return static_cast<int>(db.behaviours.size());
+  } catch (...) {
+    return handle_cxx_exceptions("mfront_plaxis_interface_get_model_count");
+  }
+  return 1;
+}
+  
 } // end of extern "C"
