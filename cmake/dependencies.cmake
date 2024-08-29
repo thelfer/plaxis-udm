@@ -26,3 +26,5 @@ include(${CPM_DOWNLOAD_LOCATION})
 ##======================================================================================================================
 CPMAddPackage(NAME MGIS GITHUB_REPOSITORY thelfer/MFrontGenericInterfaceSupport
   GIT_TAG master)
+# CPMAddPackage(NAME TFEL GITHUB_REPOSITORY thelfer/tfel
+#   GIT_TAG master)
