@@ -8,7 +8,7 @@ subroutine User_Mod(IDTask, iMod, IsUndr, iStep, iTer, Iel,Int, X, &
      function mgis_plaxis_interface_wrapper(task, model, &
           nisvs, unsymmetric, stressDependent, timeDependent, constistentTangentOperator, &
           D, Sig, StVar, & 
-          Props, Sig0, StVar0, dEps, dt) &
+          Props, Sig0, StVar0, dEps, T, dt) &
           bind(c,name = 'mgis_plaxis_interface') &
           result(r)
        use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -27,6 +27,7 @@ subroutine User_Mod(IDTask, iMod, IsUndr, iStep, iTer, Iel,Int, X, &
        real(kind=c_double), intent(in) :: Sig0(6)
        real(kind=c_double), intent(in) :: StVar0(*)
        real(kind=c_double), intent(in) :: dEps(12)
+       real(kind=c_double), intent(in), value :: T
        real(kind=c_double), intent(in), value :: dt
        integer(kind=c_int) :: r
      end function mgis_plaxis_interface_wrapper
@@ -39,15 +40,17 @@ subroutine User_Mod(IDTask, iMod, IsUndr, iStep, iTer, Iel,Int, X, &
   double precision, intent(in) :: X, Y, Z, Bulk_W, Swp0, Time0, Swp
   double precision, intent(in) :: dTime
   double precision, intent(in) :: Props(*)
-  double precision, intent(in) :: Sig0(6), StVar0(*)
+  double precision, intent(in) :: Sig0(20), StVar0(*)
   double precision, intent(in) :: dEps(12)
   integer IDTask, iMod, iAbort
+  double precision T
   integer dummy_integer
   double precision dummy_real
+  T = Sig0(18)
   iAbort = mgis_plaxis_interface_wrapper(IDTask, iMod, &
        nStat, NonSym, iStrsDep, iTimeDep, iTang,       &
        D, Sig, StVar,                                  &
-       Props , Sig0, StVar0, dEps, dTime)
+       Props , Sig0, StVar0, dEps, T, dTime)
   ! removing unused variable warning
   if (.false.) dummy_integer = IsUndr
   if (.false.) dummy_integer = Iel
@@ -133,16 +136,12 @@ subroutine GetParamName (iModel, iParam, name)
   end interface
   integer, intent(in)  :: iModel
   integer, intent(in)  :: iParam
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetParamName
   character(len= *), intent(out) :: name
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetParamName
   character (len=255) tmp
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetModelName
   call get_material_property_name_wrapper(tmp, iModel, iParam)
   name = tmp(:)
 end subroutine GetParamName
-
-! GetParamName(iModel, iParam, Name)
-! GetParamUnit(iModel, iParam, Units)
 
 subroutine GetStateVarCount (iModel, C)
   implicit none
@@ -176,14 +175,9 @@ subroutine GetStateVarName (iModel, iStateVar, name)
   end interface
   integer, intent(in)  :: iModel
   integer, intent(in)  :: iStateVar
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetStateVarName
   character(len= *), intent(out) :: name
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetStateVarName
   character (len=255) tmp
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetModelName
   call get_state_variable_name_wrapper(tmp, iModel, iStateVar)
   name = tmp(:)
 end subroutine GetStateVarName
-
-! GetStateVarCount(iModel, C)
-! GetStateVarName(iModel, iParam, Name)
-! GetStateVarUnit(iModel, iParam, Units)

@@ -10,20 +10,28 @@ program main
   write(*,*)
   do i=1, n
      call GetModelName(i, name)
-     write(*,*) i, "Description of model ", ": '", name, "'"
+     write(*,*) "Description of model (", i, ")", ": '", name, "'"
      write(*,*) ""
      call GetParamCount(i, nprops)
-     write(*,*) "List of material properties: "
-     do j=1, nprops
-        call GetParamName(i, j, name)
-        write(*,*) "- ", j, ": ", name
-     enddo
-     write(*,*) ""
-     write(*,*) "List of internal state variables: "
+     if (nprops.ne.0) then
+        write(*,*) "List of material properties: "
+        do j=1, nprops
+           call GetParamName(i, j, name)
+           write(*,*) "- ", j, ": ", name
+        enddo
+     else
+        write(*,*) "No material property defined"
+     endif
      call GetStateVarCount(i, nstatev)
-     do j=1, nstatev
-        call GetStateVarName(i, j, name)
-        write(*,*) "- ", j, ": ", name
-     enddo
+     write(*,*) ""
+     if (nstatev.ne.0) then
+        write(*,*) "List of internal state variables: "
+        do j=1, nstatev
+           call GetStateVarName(i, j, name)
+           write(*,*) "- ", j, ": ", name
+        enddo
+     else
+        write(*,*) "No internal state variable defined"
+     endif
   enddo
 end program main
