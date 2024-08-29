@@ -7,9 +7,13 @@ enable_language(Fortran)
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
 
-add_library(MFrontPlaxisInterface SHARED
+include(cmake/dependencies.cmake)
+
+add_library(MGISPlaxisInterface SHARED
   User_Mod.f90
-  MFrontPlaxisInterface.cxx)
+  MGISPlaxisInterface.cxx)
+target_link_libraries(MGISPlaxisInterface
+  PRIVATE MFrontGenericInterface)
 
 add_executable(test test.f90)
-target_link_libraries(test PRIVATE MFrontPlaxisInterface)
+target_link_libraries(test PRIVATE MGISPlaxisInterface)
