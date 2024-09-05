@@ -16,7 +16,7 @@ program main
      if (nprops.ne.0) then
         write(*,*) "List of material properties: "
         do j=1, nprops
-           call GetParamName(i, j, name)
+           call GetParamNameImplementation(i, j, name)
            write(*,*) "- ", j, ": ", name
         enddo
      else

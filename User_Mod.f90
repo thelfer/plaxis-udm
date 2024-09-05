@@ -80,6 +80,7 @@ subroutine GetModelCountImplementation (C)
        integer(kind=c_int) :: r
      end function get_model_count_wrapper
   end interface
+!DEC$ ATTRIBUTES DLLExport :: GetModelCountImplementation
   integer (kind=4) , intent(out) :: C
   C = get_model_count_wrapper()
 end subroutine GetModelCountImplementation
@@ -105,6 +106,7 @@ subroutine GetModelNameImplementation(iModel, name)
   integer, intent(in) :: iModel
   character(len= *), intent(out) :: name
   character (len=255) tmp
+!DEC$ ATTRIBUTES DLLExport :: GetModelNameImplementation  
   call get_model_name_wrapper(tmp, iModel)
   name = tmp(:)
 end subroutine GetModelNameImplementation
@@ -131,6 +133,7 @@ subroutine GetParamCountImplementation (iModel, C)
   end interface
   integer, intent(in)  :: iModel
   integer, intent(out) :: C
+!DEC$ ATTRIBUTES DLLExport :: GetParamCountImplementation  
   C = get_material_properties_count_wrapper(iModel)
 end subroutine GetParamCountImplementation
 
@@ -158,6 +161,7 @@ subroutine GetParamNameImplementation (iModel, iParam, name)
   integer, intent(in)  :: iParam
   character(len= *), intent(out) :: name
   character (len=255) tmp
+!DEC$ ATTRIBUTES DLLExport :: GetParamNameImplementation
   call get_material_property_name_wrapper(tmp, iModel, iParam)
   name = tmp(:)
 end subroutine GetParamNameImplementation
@@ -185,6 +189,7 @@ subroutine GetStateVarCountImplementation (iModel, C)
   end interface
   integer, intent(in)  :: iModel
   integer, intent(out) :: C
+!DEC$ ATTRIBUTES DLLExport :: GetStateVarCountImplementation
   C = get_internal_state_variables_count_wrapper(iModel)
 end subroutine GetStateVarCountImplementation
 
@@ -212,6 +217,7 @@ subroutine GetStateVarNameImplementation(iModel, iStateVar, name)
   integer, intent(in)  :: iStateVar
   character(len= *), intent(out) :: name
   character (len=255) tmp
+!DEC$ ATTRIBUTES DLLExport :: GetStateVarNameImplementation
   call get_state_variable_name_wrapper(tmp, iModel, iStateVar)
   name = tmp(:)
 end subroutine GetStateVarNameImplementation
