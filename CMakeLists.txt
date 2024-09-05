@@ -15,5 +15,12 @@ add_library(MGISPlaxisInterface SHARED
 target_link_libraries(MGISPlaxisInterface
   PRIVATE MFrontGenericInterface)
 
-add_executable(test test.f90)
-target_link_libraries(test PRIVATE MGISPlaxisInterface)
+add_executable(mfront_plaxis_check mfront_plaxis_check.f90)
+target_link_libraries(mfront_plaxis_check PRIVATE MGISPlaxisInterface)
+
+install(TARGETS mfront_plaxis_check DESTINATION bin)
+if(WIN32)
+  install(TARGETS MGISPlaxisInterface DESTINATION bin)
+else(WIN32)
+  install(TARGETS MGISPlaxisInterface DESTINATION lib)
+endif(WIN32)
