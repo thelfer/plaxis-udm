@@ -69,7 +69,7 @@ subroutine User_Mod(IDTask, iMod, IsUndr, iStep, iTer, Iel,Int, X, &
   if (.false.) dummy_real = Swp
 end subroutine User_Mod
 
-subroutine GetModelCount (C)
+subroutine GetModelCountImplementation (C)
   implicit none
   interface
      function get_model_count_wrapper() &
@@ -81,11 +81,17 @@ subroutine GetModelCount (C)
      end function get_model_count_wrapper
   end interface
   integer (kind=4) , intent(out) :: C
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetModelCount
   C = get_model_count_wrapper()
+end subroutine GetModelCountImplementation
+
+subroutine GetModelCount (C)
+  implicit none
+  integer (kind=4) , intent(out) :: C
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetModelCount
+  call GetModelCountImplementation(C)
 end subroutine GetModelCount
 
-subroutine GetModelName(iModel, name)
+subroutine GetModelNameImplementation(iModel, name)
   implicit none
   interface
      subroutine get_model_name_wrapper(name, model) &
@@ -99,12 +105,19 @@ subroutine GetModelName(iModel, name)
   integer, intent(in) :: iModel
   character(len= *), intent(out) :: name
   character (len=255) tmp
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetModelName
   call get_model_name_wrapper(tmp, iModel)
   name = tmp(:)
+end subroutine GetModelNameImplementation
+
+subroutine GetModelName(iModel, name)
+  integer, intent(in) :: iModel
+  character(len= *), intent(out) :: name
+  character (len=255) tmp
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetModelName
+  call GetModelNameImplementation(iModel, name)
 end subroutine GetModelName
 
-subroutine GetParamCount (iModel, C)
+subroutine GetParamCountImplementation (iModel, C)
   implicit none
   interface
      function get_material_properties_count_wrapper(model) &
@@ -118,11 +131,18 @@ subroutine GetParamCount (iModel, C)
   end interface
   integer, intent(in)  :: iModel
   integer, intent(out) :: C
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetParamCount
   C = get_material_properties_count_wrapper(iModel)
+end subroutine GetParamCountImplementation
+
+subroutine GetParamCount (iModel, C)
+  implicit none
+  integer, intent(in)  :: iModel
+  integer, intent(out) :: C
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetParamCount
+  call GetParamCountImplementation(iModel, C)
 end subroutine GetParamCount
 
-subroutine GetParamName (iModel, iParam, name)
+subroutine GetParamNameImplementation (iModel, iParam, name)
   implicit none
   interface
      subroutine get_material_property_name_wrapper(name, model, i) &
@@ -137,13 +157,21 @@ subroutine GetParamName (iModel, iParam, name)
   integer, intent(in)  :: iModel
   integer, intent(in)  :: iParam
   character(len= *), intent(out) :: name
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetParamName
   character (len=255) tmp
   call get_material_property_name_wrapper(tmp, iModel, iParam)
   name = tmp(:)
+end subroutine GetParamNameImplementation
+
+subroutine GetParamName (iModel, iParam, name)
+  implicit none
+  integer, intent(in)  :: iModel
+  integer, intent(in)  :: iParam
+  character(len= *), intent(out) :: name
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetParamName
+  call GetParamNameImplementation (iModel, iParam, name)
 end subroutine GetParamName
 
-subroutine GetStateVarCount (iModel, C)
+subroutine GetStateVarCountImplementation (iModel, C)
   implicit none
   interface
      function get_internal_state_variables_count_wrapper(model) &
@@ -157,11 +185,18 @@ subroutine GetStateVarCount (iModel, C)
   end interface
   integer, intent(in)  :: iModel
   integer, intent(out) :: C
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetStateVarCount
   C = get_internal_state_variables_count_wrapper(iModel)
+end subroutine GetStateVarCountImplementation
+
+subroutine GetStateVarCount (iModel, C)
+  implicit none
+  integer, intent(in)  :: iModel
+  integer, intent(out) :: C
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetStateVarCount
+  call GetStateVarCountImplementation (iModel, C)
 end subroutine GetStateVarCount
 
-subroutine GetStateVarName (iModel, iStateVar, name)
+subroutine GetStateVarNameImplementation(iModel, iStateVar, name)
   implicit none
   interface
      subroutine get_state_variable_name_wrapper(name, model, i) &
@@ -176,8 +211,16 @@ subroutine GetStateVarName (iModel, iStateVar, name)
   integer, intent(in)  :: iModel
   integer, intent(in)  :: iStateVar
   character(len= *), intent(out) :: name
-!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetStateVarName
   character (len=255) tmp
   call get_state_variable_name_wrapper(tmp, iModel, iStateVar)
   name = tmp(:)
+end subroutine GetStateVarNameImplementation
+
+subroutine GetStateVarName (iModel, iStateVar, name)
+  implicit none
+  integer, intent(in)  :: iModel
+  integer, intent(in)  :: iStateVar
+  character(len= *), intent(out) :: name
+!DEC$ ATTRIBUTES DLLExport, StdCall, reference ::  GetStateVarName
+  call GetStateVarNameImplementation(iModel, iStateVar, name)
 end subroutine GetStateVarName
